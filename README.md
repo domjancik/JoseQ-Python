@@ -28,12 +28,16 @@ Together with the log, the screen can also host debugging and troubleshooting to
 Message examples:
 #### Button update
 ```
-STEP-BUTTON 4(Bucket):5 ON
-PLAY-BUTTON OFF
-STOP-BUTTON ON
+PLAY:_ON
+STOP:OFF
+PLAY:YES
+STOP:NOO
+PLAY:ANO
+ROW1:0110|1000|1010|0000
 ```
 
 #### All update (ASCII Art)
+(Not likely to use this one)
 ```
 v ^ 134
 ^vv^ v^^^ v^v^ ^^^^
@@ -43,10 +47,10 @@ vvvv v^^^ v^v^ vvvv
 
 #### All update (key:value)
 ```
-PLAY:ON STOP:OFF TEMPO:134
-ROW1:0110 1000 1010 0000
+PLAY:YES STOP:NOO TEMPO:134
+ROW1:0110|1000|1010|0000
 ...
-ROW6:1111 1000 1010 1111 
+ROW6:1111|1000|1010|1111 
 ```
 (Likely easier to parse, also not required to send all at once, singular updates can use same format, RPi side can then use single logic for both single and full updates)
 
