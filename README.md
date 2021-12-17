@@ -22,7 +22,8 @@ Po–Ne 08:00–19:00
 25.12.2021–26.12.2021 zavřeno
 01.01.2022 zavřeno" YES (low (high?) level sidenotes kept in secure location)) 
 
-So aim for readability -> log can be displayed permanently on the attached screen
+So aim for readability -> log can be displayed permanently on the attached screen.
+Together with the log, the screen can also host debugging and troubleshooting tools.
 
 ### RPi > Arduino
 - Current Step
@@ -47,5 +48,5 @@ So we have about a third of what's considered an adequate human perception to re
 Yes, there is also the issue of timing the note triggers - the drum hits - exactly right, to stay unaffected by the background processing required to bring the experience to life. Is it really a requirement (fastest development is no development - thinking the problem through and writing a single paragraph may save hours) though? Are the mechanics precise enough that this optimization would make a difference? Is a little swing (experiment with artificial swing) a bad thing? And the swing will be affected by user action - how much they're interacting with the device - maybe interesting slowdowns could occur and if not... we'll make them occur.
 
 Anyways, I think that the decision here is to:
-- Use strings for communication (easier readability in Serial monitors, less wasted effort)
+- Use strings for communication (easier readability in Serial monitors, less wasted effort, easier to mock)
 - Send single control changes (to reduce load) together with occassional (idea: reveal format - able to assign details levels to parts of text (names: sidenot, sidenote, derail, explain, ...)) full state update to avoid state drift (single control changes should be pretty easy to implement with the object/callback based approach used in JoseQ)
