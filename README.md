@@ -25,6 +25,30 @@ Po–Ne 08:00–19:00
 So aim for readability -> log can be displayed permanently on the attached screen.
 Together with the log, the screen can also host debugging and troubleshooting tools.
 
+Message examples:
+#### Button update
+```
+STEP-BUTTON 4(Bucket):5 ON
+PLAY-BUTTON OFF
+STOP-BUTTON ON
+```
+
+#### All update (ASCII Art)
+```
+v ^ 134
+^vv^ v^^^ v^v^ ^^^^
+...
+vvvv v^^^ v^v^ vvvv 
+```
+
+#### All update (key:value)
+```
+PLAY:ON STOP:OFF TEMPO:134
+ROW1:0110 1000 1010 0000
+...
+ROW6:1111 1000 1010 1111 
+```
+
 ### RPi > Arduino
 - Current Step
 
