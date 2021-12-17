@@ -48,6 +48,7 @@ ROW1:0110 1000 1010 0000
 ...
 ROW6:1111 1000 1010 1111 
 ```
+(Likely easier to parse, also not required to send all at once, singular updates can use same format, RPi side can then use single logic for both single and full updates)
 
 ### RPi > Arduino
 - Current Step
