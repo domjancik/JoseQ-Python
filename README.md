@@ -7,10 +7,22 @@ https://stackoverflow.com/questions/17553543/pyserial-non-blocking-read-loop
 Following needs to be communicated:
 
 ### Arduino > RPi
-- Start
-- Stop
+- Start (git history player - see animation of file development) Down/Up
+- Stop Down/Up
 - Change Tempo
-- Steps State
+- Steps State Index, Down/Up
+
+(All buttons can be treated the same with Index, State fields... or maybe not, since)(maybe I should focus MAINLY on readability - this could be also YES YES YES be displayed on the screen permanently - a console view from the pi - did I get an update on the order? music*CLAUDE DEBUSSY: CLAIR DE LUNE -> "
+Fri, 17 Dec, 11:12 (12 hours ago)
+to me" "Dobrý den,
+
+Vaše zásilka číslo 251179905 z internetového obchodu rpishop.cz je pro Vás připravena" YES "Otevírací doba:
+Po–Ne 08:00–19:00
+24.12.2021 08:00–12:00
+25.12.2021–26.12.2021 zavřeno
+01.01.2022 zavřeno" YES (low (high?) level sidenotes kept in secure location)) 
+
+So aim for readability -> log can be displayed permanently on the attached screen
 
 ### RPi > Arduino
 - Current Step
@@ -36,4 +48,4 @@ Yes, there is also the issue of timing the note triggers - the drum hits - exact
 
 Anyways, I think that the decision here is to:
 - Use strings for communication (easier readability in Serial monitors, less wasted effort)
-- Send single control changes (to reduce load) together with occassional (idea: reveal format - able to assign details levels to parts of text (names: sidenot, sidenote, derail, explain, ...)) full state update to avoid state drift 
+- Send single control changes (to reduce load) together with occassional (idea: reveal format - able to assign details levels to parts of text (names: sidenot, sidenote, derail, explain, ...)) full state update to avoid state drift (single control changes should be pretty easy to implement with the object/callback based approach used in JoseQ)
