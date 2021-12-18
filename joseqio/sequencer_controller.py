@@ -16,9 +16,21 @@ class SequencerController():
 
             return inner
 
+        def set_track_steps(track_index: int):
+            def inner(value):
+                sequencer.set_track_steps(track_index, value)
+
+            return inner
+
         self.command_handlers = {
             "PLAY": conditionally_do(sequencer.play),
-            "STOP": conditionally_do(sequencer.stop)
+            "STOP": conditionally_do(sequencer.stop),
+            "ROW1": set_track_steps(0),
+            "ROW2": set_track_steps(1),
+            "ROW3": set_track_steps(2),
+            "ROW4": set_track_steps(3),
+            "ROW5": set_track_steps(4),
+            "ROW6": set_track_steps(5)
         }
 
     def evaluate_command(self, key: str, value):

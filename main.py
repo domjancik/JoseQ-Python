@@ -19,7 +19,11 @@ def serial_function(sequencer: MidiSequencer):
     controller = SequencerController(sequencer) 
     def serial_command_received(commands):
         for (key, value) in commands.items():
-           controller.evaluate_command(key, value) 
+           try:
+              controller.evaluate_command(key, value) 
+           except AssertionError:
+               logger.exception(f"Failed to evaluate command {key}:{value}")
+
 
     receiver = SerialReceiver(serial_command_received)
     receiver.run()
