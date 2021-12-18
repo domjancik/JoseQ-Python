@@ -25,6 +25,7 @@ class SequencerController():
         self.command_handlers = {
             "PLAY": conditionally_do(sequencer.play),
             "STOP": conditionally_do(sequencer.stop),
+            "TEMPO": sequencer.set_tempo,
             "ROW1": set_track_steps(0),
             "ROW2": set_track_steps(1),
             "ROW3": set_track_steps(2),

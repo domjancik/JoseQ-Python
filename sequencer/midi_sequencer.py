@@ -77,6 +77,10 @@ class MidiSequencer():
         self.tracks[track_index].set_steps(steps)
         self._touch()
 
+    def set_tempo(self, tempo: int):
+        self.tempo = tempo
+        self._touch()
+
     def _touch(self):
         # TODO stop if untouched
         pass
