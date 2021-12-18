@@ -1,5 +1,5 @@
+# DEPRECATED
 from typing import Iterable
-
 
 def decode_sequencer_state():
     pass
@@ -15,4 +15,4 @@ def byte_to_bit_bool_array(b: int) -> Iterable[bool]:
     return bool_array
 
 def extract_bit_bool(b: int, index: int) -> bool:
-    return True if b >> & 1 else False
+    return True if (b >> index & 1) == 1 else False
