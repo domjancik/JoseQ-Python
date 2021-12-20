@@ -2,6 +2,7 @@ import logging
 import threading
 from time import sleep
 import os
+import sys
 import mido
 from dotenv import load_dotenv
 from joseqio.sequencer_controller import SequencerController
@@ -12,7 +13,7 @@ load_dotenv()
 PORT_NAME = os.environ["JOSEQ_SERIALPORT"]
 BAUD_RATE = int(os.environ["JOSEQ_SERIALBAUDRATE"]) 
 
-logging.basicConfig(handlers=[logging.StreamHandler()], level=logging.DEBUG)
+logging.basicConfig(handlers=[logging.StreamHandler(sys.stdout)], level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 def sequencer_function(sequencer: MidiSequencer):
