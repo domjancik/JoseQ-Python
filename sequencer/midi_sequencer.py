@@ -62,6 +62,9 @@ class MidiSequencer():
         logger.debug(f"Current step: {self.step}")
 
     def step_time(self):
+        if self.tempo == 0:
+            logger.warn("Tempo is 0")
+            return 0.1
         return 1 / self.tempo * 16 
     
     def stop(self):
@@ -78,6 +81,10 @@ class MidiSequencer():
         self._touch()
 
     def set_tempo(self, tempo: int):
+        if (tempo == 0):
+            logger.debug("Ignoring command to set tempo to 0")
+            return
+        logger.debug(f"Setting tempo to: {tempo}")
         self.tempo = tempo
         self._touch()
 

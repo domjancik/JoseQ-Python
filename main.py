@@ -1,10 +1,16 @@
 import logging
 import threading
 from time import sleep
+import os
+import mido
+from dotenv import load_dotenv
 from joseqio.sequencer_controller import SequencerController
 from joseqio.serial_receiver import SerialReceiver
-import mido
 from sequencer.midi_sequencer import MidiSequencer
+
+load_dotenv()
+PORT_NAME = os.environ["JOSEQ_SERIALPORT"]
+BAUD_RATE = int(os.environ["JOSEQ_SERIALBAUDRATE"]) 
 
 logging.basicConfig(handlers=[logging.StreamHandler()], level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -25,7 +31,7 @@ def serial_function(sequencer: MidiSequencer):
                logger.exception(f"Failed to evaluate command {key}:{value}")
 
 
-    receiver = SerialReceiver(serial_command_received)
+    receiver = SerialReceiver(PORT_NAME, BAUD_RATE, serial_command_received)
     receiver.run()
 
 if __name__ == '__main__':

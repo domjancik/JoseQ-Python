@@ -36,6 +36,9 @@ VALUE_MAPPERS = {
     
 def parse_message_tokens(message_tokens: Mapping[str, str]):
     def map_value(key, value):
-        return VALUE_MAPPERS[key](value)
+        mapper = VALUE_MAPPERS.get(key)
+        if not mapper:
+            return None
+        return mapper(value)
 
-    return {k:map_value(k, v) for (k, v) in message_tokens.items()}
+    return {k:map_value(k, v) for (k, v) in message_tokens.items() if map_value(k, v) is not None}

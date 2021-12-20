@@ -1,4 +1,4 @@
-pip install mido python-rtmidi pyserial
+pip install mido python-rtmidi pyserial python-dotenv
 https://stackoverflow.com/questions/17553543/pyserial-non-blocking-read-loop
 
 
