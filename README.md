@@ -62,13 +62,19 @@ wormhole ssh invite
 # Follow instructions
 ```
 
-### Static IP Address on ethernet
+### Ethernet Connection for SSH
 
 Enable direct connections via ethernet with no need for internet connectivity by setting a static IP address.
+Metrics are set to prefer wlan for internet connectivity.
 
 Add the following to `/etc/dhcpcd.conf`
 ```
+interface wlan0
+metric 100
+
 interface eth0
+# Prefer wlan for internet
+metric 200
 static routers=2.0.0.1
 static ip_address=2.0.0.10
 static domain_name_servers=
