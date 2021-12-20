@@ -15,6 +15,7 @@ class SerialReceiver():
         
     def run(self):
         with serial.Serial(self.port_name, self.baud_rate, timeout=1) as ser:
+            logger.info(f"Connected to Serial: {self.port_name} at baud rate {self.baud_rate}")
             while True:
                 if (ser.in_waiting > 0):
                     message_bytes: bytes = ser.readline()
