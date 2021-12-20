@@ -1,6 +1,85 @@
-pip install mido python-rtmidi pyserial python-dotenv
-https://stackoverflow.com/questions/17553543/pyserial-non-blocking-read-loop
+# Installation
 
+```
+pip install mido python-rtmidi pyserial python-dotenv
+```
+(Hotfix for autostart, replace with venv)
+```
+sudo pip install mido python-rtmidi pyserial python-dotenv
+```
+
+https://stackoverflow.com/questions/17553543/pyserial-non-blocking-read-loop
+https://raspberrytips.com/install-latest-python-raspberry-pi/
+https://phoenixnap.com/kb/enable-ssh-raspberry-pi
+https://ericplayground.com/2017/11/06/set-up-wifi-through-the-command-line-terminal-on-raspberry-pi/
+
+# Clone
+
+TODO (git clone)
+
+# Install ngrok
+
+For simple internet access
+https://www.mathewjenkinson.com/how-to-install-ngrok-on-a-raspberrypi/
+
+If using ngrok in autostart, also authenticate with root user
+```
+sudo ngrok authtoken $NGROK_AUTH_TOKEN
+```
+
+
+# Autostart
+
+Create logs folder in home
+```
+# in /home/pi (~)
+mkdir logs
+```
+
+Add the following to `/etc/rc.local`:
+```
+# Run JoseQ Python program
+python3.9 /home/pi/JoseQ-Python/main.py > /home/pi &
+# ngrok setup
+ngrok tcp 22 --log=stdout > /dev/null &
+```
+
+More info: https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
+
+## Easier SSH logons
+
+### Use SSH Keys
+
+Use SSH keys so password entry is not required.
+
+Exchange SSH keys simply using magic-wormhole.
+
+On RPi:
+```
+sudo apt install magic-wormhole
+mkdir ~/.ssh
+wormhole ssh invite
+# Follow instructions
+```
+
+### Static IP Address on ethernet
+
+Enable direct connections via ethernet with no need for internet connectivity by setting a static IP address.
+
+Add the following to `/etc/dhcpcd.conf`
+```
+interface eth0
+static routers=2.0.0.1
+static ip_address=2.0.0.10
+static domain_name_servers=
+static domain_search=
+```
+
+More info https://www.makeuseof.com/raspberry-pi-set-static-ip/ 
+
+# Notes
+
+`raspi-config` Provides RPi configuration even in command line
 
 # Protocol
 ## Overview
