@@ -70,9 +70,12 @@ class MidiSequencer():
     def increment_step(self):
         if not self.is_playing:
             return
-        self.step = (self.step + 1) % STEPS_COUNT
-        self.serial.send(f"S:{self.step}")
+        self._set_step((self.step + 1) % STEPS_COUNT)
         logger.debug(f"Current step: {self.step}")
+
+    def _set_step(self, step: int):
+        self.step = step
+        self.serial.send(f"S:{self.step}")
 
     def step_time(self):
         if self.tempo == 0:
@@ -83,7 +86,7 @@ class MidiSequencer():
     def stop(self):
         if not self.is_playing:
             logger.debug("Resetting step to 0")
-            self.step = 0
+            self._set_step(0)
 
         logger.debug("Stopping playback")
         self.is_playing = False
