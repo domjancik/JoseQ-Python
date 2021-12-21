@@ -32,7 +32,7 @@ class Track():
         if self.steps[step_index]:
             self._play_midi(step_index)
             if (self.flash_on_play):
-                self.serial.send("FLASH")
+                self.serial.send("F")
 
     def set_steps(self, steps: list[bool]):
         assert len(steps) == STEPS_COUNT, f"Step count mismatch when updating track {self.name}"
@@ -71,7 +71,7 @@ class MidiSequencer():
         if not self.is_playing:
             return
         self.step = (self.step + 1) % STEPS_COUNT
-        self.serial.send(f"STEP:{self.step}")
+        self.serial.send(f"S:{self.step}")
         logger.debug(f"Current step: {self.step}")
 
     def step_time(self):
