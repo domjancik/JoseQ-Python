@@ -16,7 +16,7 @@ TRACKS = [
     ('5 - SNARES', [ 62, 63 ], 0, True),
     ('6 - KICK', [ 64 ], 0, True)
 ]
-INACTIVITY_TIMEOUT = 30 
+INACTIVITY_TIMEOUT = 12
 class Track():
     def __init__(self, port, serial: SerialReceiver, notes: list[int], channel: int = 0, name: str = '', flash_on_play: bool = False) -> None:
         self.notes = notes
