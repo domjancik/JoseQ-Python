@@ -2,48 +2,60 @@ import mido
 import logging
 import time
 
+from joseqio.serial_receiver import SerialReceiver
+
 logger = logging.getLogger(__name__)
 
 STEPS_COUNT = 16
-# Tracks defined as tuples (name, note, channel)
+# Tracks defined as tuples (name, note, channel, flash)
 TRACKS = [
-    ('1', 60, 0),
-    ('2', 63, 0),
-    ('3', 66, 0),
-    ('4', 69, 0),
-    ('5', 72, 0),
-    ('6', 75, 0)
+    ('1', [ 58 ], 0, True),
+    ('2', [ 59 ], 0, True),
+    ('3', [ 60 ], 0, True),
+    ('4', [ 61 ], 0, True),
+    ('5', [ 62, 63 ], 0, True),
+    ('6', [ 64 ], 0, True)
 ]
 
 class Track():
-    def __init__(self, port, note: int, channel: int = 0, name: str = '') -> None:
-        self.note = note
+    def __init__(self, port, serial: SerialReceiver, notes: list[int], channel: int = 0, name: str = '', flash_on_play: bool = False) -> None:
+        self.notes = notes
         self.channel = channel
         self.steps = [False]*STEPS_COUNT
         self.port = port
         self.name = name
+        self.flash_on_play = flash_on_play
+        self.serial = serial
 
     def play(self, step_index: int):
         assert step_index < STEPS_COUNT
         if self.steps[step_index]:
-            self._play_midi()
+            self._play_midi(step_index)
+            if (self.flash_on_play):
+                self.serial.send("FLASH")
 
     def set_steps(self, steps: list[bool]):
         assert len(steps) == STEPS_COUNT, f"Step count mismatch when updating track {self.name}"
         self.steps = steps
         logger.debug(f"Track {self.name} - Updated steps to {steps}")
 
-    def _play_midi(self):
-        msg = mido.Message('note_on', note=self.note, channel=self.channel)
+    def _get_current_note(self, step_index: int):
+        note_index = step_index % len(self.notes) 
+        return self.notes[note_index]
+
+    def _play_midi(self, step_index: int):
+        note = self._get_current_note(step_index)
+        msg = mido.Message('note_on', note=note, channel=self.channel)
         logger.debug(f"Sending MIDI message: {msg}")
         self.port.send(msg)
 
 class MidiSequencer():
-    def __init__(self, port) -> None:
+    def __init__(self, port, serial: SerialReceiver) -> None:
         self.step = 0
         self.tempo = 120
         self.is_playing = False
-        self.tracks = [Track(port, note, channel, name) for (name, note, channel) in TRACKS]
+        self.tracks = [Track(port, serial, note, channel, name, flash) for (name, note, channel, flash) in TRACKS]
+        self.serial = serial
         logger.debug(f"Initialised tracks: {self.tracks}")
 
     def play(self):
@@ -59,6 +71,7 @@ class MidiSequencer():
         if not self.is_playing:
             return
         self.step = (self.step + 1) % STEPS_COUNT
+        self.serial.send(f"STEP:{self.step}")
         logger.debug(f"Current step: {self.step}")
 
     def step_time(self):

@@ -1,5 +1,5 @@
 import logging
-import os
+import queue
 from typing import Any, Callable, Mapping
 import serial
 from joseqio.protocol import parse_message_tokens, tokenize_message
@@ -8,10 +8,19 @@ from time import sleep
 logger = logging.getLogger(__name__)
 
 class SerialReceiver():
-    def __init__(self, port_name: str, baud_rate: int, receive_callback: Callable[[Mapping[str, Any]], Any]) -> None:
-        self.receive_callback = receive_callback
+    def __init__(self, port_name: str, baud_rate: int) -> None:
         self.port_name = port_name
         self.baud_rate = baud_rate
+        self.command_queue: queue.Queue[str] = queue.Queue()
+
+    def set_callback(self, receive_callback: Callable[[Mapping[str, Any]], Any]):
+        self.receive_callback = receive_callback
+
+    def send(self, command: str):
+        if self.command_queue.qsize() > 5:
+            logger.warn(f"Too many commands in queue, ignoring command {command}")
+
+        self.command_queue.put(command)
         
     def run(self):
         with serial.Serial(self.port_name, self.baud_rate, timeout=1) as ser:
@@ -30,5 +39,10 @@ class SerialReceiver():
                     except UnicodeDecodeError:
                         logger.exception(f"Failed to decode Serial input - {message_bytes}")
 
+                while self.command_queue.qsize():
+                    logger.debug(f"Commands in queue: {self.command_queue.qsize()}")
+                    command = self.command_queue.get()
+                    logger.debug(f"Sending command: {command}")
+                    ser.write(f"{command}\n".encode('ascii'))
                 sleep(0.1)
 
