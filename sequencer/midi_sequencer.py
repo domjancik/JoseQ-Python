@@ -16,7 +16,7 @@ TRACKS = [
     ('5', [ 62, 63 ], 0, True),
     ('6', [ 64 ], 0, True)
 ]
-
+INACTIVITY_TIMEOUT = 30 
 class Track():
     def __init__(self, port, serial: SerialReceiver, notes: list[int], channel: int = 0, name: str = '', flash_on_play: bool = False) -> None:
         self.notes = notes
@@ -56,6 +56,7 @@ class MidiSequencer():
         self.is_playing = False
         self.tracks = [Track(port, serial, note, channel, name, flash) for (name, note, channel, flash) in TRACKS]
         self.serial = serial
+        self._touch()
         logger.debug(f"Initialised tracks: {self.tracks}")
 
     def play(self):
@@ -105,14 +106,24 @@ class MidiSequencer():
         self._touch()
 
     def _touch(self):
-        # TODO stop if untouched
-        pass
+        self.last_touched_time = time.time()
+
+    def _is_inactive(self):
+        return time.time() - self.last_touched_time > INACTIVITY_TIMEOUT
+
+    def _stop_if_inactive(self):
+        if self.is_playing and self._is_inactive():
+            logger.debug("Stopping due to inactivity")
+            self.stop()
+
 
     def loop(self):
-        if (self.is_playing):
+        if self.is_playing:
             self.play_tracks()
         time.sleep(self.step_time())
         self.increment_step()
+        if self.step == 0:
+            self._stop_if_inactive()
 
 
     
