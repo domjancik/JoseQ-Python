@@ -9,10 +9,10 @@ logger = logging.getLogger(__name__)
 STEPS_COUNT = 16
 # Tracks defined as tuples (name, note, channel, flash)
 TRACKS = [
-    ('1 - CB1', [ 58 ], 0, True),
-    ('2 - CB2', [ 59 ], 0, True),
-    ('3 - CRASH', [ 60 ], 0, True),
-    ('4 - BUCKET', [ 61 ], 0, True),
+    ('1 - CB1', [ 58 ], 0, False),
+    ('2 - CB2', [ 59 ], 0, False),
+    ('3 - CRASH', [ 60 ], 0, False),
+    ('4 - BUCKET', [ 61 ], 0, False),
     ('5 - SNARES', [ 62, 63 ], 0, True),
     ('6 - KICK', [ 64 ], 0, True)
 ]
