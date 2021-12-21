@@ -9,12 +9,12 @@ logger = logging.getLogger(__name__)
 STEPS_COUNT = 16
 # Tracks defined as tuples (name, note, channel, flash)
 TRACKS = [
-    ('1', [ 58 ], 0, True),
-    ('2', [ 59 ], 0, True),
-    ('3', [ 60 ], 0, True),
-    ('4', [ 61 ], 0, True),
-    ('5', [ 62, 63 ], 0, True),
-    ('6', [ 64 ], 0, True)
+    ('1 - CB1', [ 58 ], 0, True),
+    ('2 - CB2', [ 59 ], 0, True),
+    ('3 - CRASH', [ 60 ], 0, True),
+    ('4 - BUCKET', [ 61 ], 0, True),
+    ('5 - SNARES', [ 62, 63 ], 0, True),
+    ('6 - KICK', [ 64 ], 0, True)
 ]
 INACTIVITY_TIMEOUT = 30 
 class Track():
@@ -26,6 +26,7 @@ class Track():
         self.name = name
         self.flash_on_play = flash_on_play
         self.serial = serial
+        self.velocities = [127]*len(notes) 
 
     def play(self, step_index: int):
         assert step_index < STEPS_COUNT
@@ -39,13 +40,17 @@ class Track():
         self.steps = steps
         logger.debug(f"Track {self.name} - Updated steps to {steps}")
 
+    def set_velocity(self, velocity: int, note_index: int):
+        self.velocities[note_index] = velocity
+        logger.debug(f"Track {self.name} setting velocity to {velocity}")
+
     def _get_current_note(self, step_index: int):
         note_index = step_index % len(self.notes) 
-        return self.notes[note_index]
+        return (self.notes[note_index], self.velocities[note_index])
 
     def _play_midi(self, step_index: int):
-        note = self._get_current_note(step_index)
-        msg = mido.Message('note_on', note=note, channel=self.channel)
+        (note, velocity) = self._get_current_note(step_index)
+        msg = mido.Message('note_on', note=note, channel=self.channel, velocity=velocity)
         logger.debug(f"Sending MIDI message: {msg}")
         self.port.send(msg)
 
@@ -99,6 +104,12 @@ class MidiSequencer():
         assert track_index < len(self.tracks)
         self.tracks[track_index].set_steps(steps)
         self._touch()
+
+    def set_track_velocity(self, track_index: int, velocity: int, note_index: int = 0):
+        assert velocity >= 0
+        assert velocity <= 127
+        self.tracks[track_index].set_velocity(velocity, note_index)
+        # Not touching, not user input
 
     def set_tempo(self, tempo: int):
         if (tempo == 0):

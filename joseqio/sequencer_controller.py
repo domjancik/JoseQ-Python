@@ -22,10 +22,23 @@ class SequencerController():
 
             return inner
 
+        def set_track_velocity(track_index: int, note_index: int = 0):
+            def inner(value):
+                sequencer.set_track_velocity(track_index, value, note_index)
+
+            return inner
+            
         self.command_handlers = {
             "PLAY": conditionally_do(sequencer.play),
             "STOP": conditionally_do(sequencer.stop),
             "TEMPO": sequencer.set_tempo,
+            "CAL1": set_track_velocity(0),
+            "CAL2": set_track_velocity(1),
+            "CAL3": set_track_velocity(2),
+            "CAL4": set_track_velocity(3),
+            "CAL5": set_track_velocity(4, 0),
+            "CAL6": set_track_velocity(4, 1),
+            "CAL7": set_track_velocity(5),
             "ROW1": set_track_steps(0),
             "ROW2": set_track_steps(1),
             "ROW3": set_track_steps(2),
