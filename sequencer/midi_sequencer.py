@@ -60,8 +60,11 @@ class MidiSequencer():
         logger.debug(f"Initialised tracks: {self.tracks}")
 
     def play(self):
-        self.is_playing = True
-        logger.debug(f"Playing: {self.is_playing}")
+        if not self.is_playing:
+            self.is_playing = True
+            logger.debug(f"Playing: {self.is_playing}")
+            self.play_tracks()
+
         self._touch()
     
     def play_tracks(self):
