@@ -44,5 +44,5 @@ class SerialReceiver():
                     command = self.command_queue.get()
                     logger.debug(f"Sending command: {command}")
                     ser.write(f"{command}\n".encode('ascii'))
-                # sleep(0.1)
+                sleep(0.05)
 
